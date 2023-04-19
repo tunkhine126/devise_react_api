@@ -1,7 +1,5 @@
-class Api::V1::SessionsController < Devise::SessionsController
+class Api::V1::SessionsController < Api::V1::BaseController
   respond_to :json
-
-  private
 
   def create
     user = User.find_for_database_authentication(email: params[:user] && params[:user][:email])
@@ -9,7 +7,7 @@ class Api::V1::SessionsController < Devise::SessionsController
       respond_with_error "Incorrect email or password", 401
     else
       sign_in(user)
-      render json: { auth_token: user.authentication_token, user: user }, location: root_path, status: :created
+      render json: { auth_token: user.authentication_token, user: user }, status: :created
     end
   end
 
